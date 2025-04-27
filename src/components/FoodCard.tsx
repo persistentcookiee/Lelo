@@ -1,0 +1,120 @@
+
+import React from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+interface FoodItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  quantity: string;
+  expiryTime: string;
+  location: string;
+  distance?: string;
+  isUrgent?: boolean;
+  donor?: string;
+  status?: 'available' | 'reserved' | 'completed';
+}
+
+interface FoodCardProps {
+  food: FoodItem;
+  viewType: 'donor' | 'receiver';
+  onClaim?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+}
+
+const FoodCard: React.FC<FoodCardProps> = ({ 
+  food, 
+  viewType, 
+  onClaim, 
+  onEdit, 
+  onDelete 
+}) => {
+  const isAvailable = food.status === 'available' || !food.status;
+  
+  return (
+    <Card className="overflow-hidden">
+      <div className="relative h-48 bg-muted">
+        <img 
+          src={food.image || '/placeholder.svg'} 
+          alt={food.title} 
+          className="object-cover w-full h-full"
+        />
+        {food.isUrgent && (
+          <Badge variant="destructive" className="absolute top-2 right-2">
+            Urgent
+          </Badge>
+        )}
+      </div>
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle className="line-clamp-1">{food.title}</CardTitle>
+            <CardDescription className="flex items-center text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <path d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 5.523 4.477 10 10 10 1.555 0 3.023-.358 4.35-.992"/>
+                <path d="m18 9-4 4-2-2"/>
+              </svg>
+              {food.location}
+              {viewType === 'receiver' && food.distance && (
+                <span className="ml-2">{food.distance}</span>
+              )}
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          <p className="text-sm line-clamp-2">{food.description}</p>
+          <div className="flex justify-between text-sm">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M3 9h18" />
+                <path d="M9 3v18" />
+              </svg>
+              <span>{food.quantity}</span>
+            </div>
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>{food.expiryTime}</span>
+            </div>
+          </div>
+          {viewType === 'receiver' && food.donor && (
+            <div className="text-sm text-gray-500">
+              Posted by: {food.donor}
+            </div>
+          )}
+        </div>
+      </CardContent>
+      <CardFooter className="pt-2">
+        {viewType === 'donor' ? (
+          <div className="flex justify-between w-full">
+            <Button variant="outline" size="sm" onClick={() => onEdit?.(food.id)}>
+              Edit
+            </Button>
+            <Button variant="destructive" size="sm" onClick={() => onDelete?.(food.id)}>
+              Delete
+            </Button>
+          </div>
+        ) : (
+          <Button 
+            className="w-full" 
+            disabled={!isAvailable}
+            onClick={() => onClaim?.(food.id)}
+          >
+            {isAvailable ? 'Claim' : 'Claimed'}
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  );
+};
+
+export default FoodCard;
