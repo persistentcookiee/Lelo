@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, MessageSquare } from 'lucide-react';
+import { Input } from "@/components/ui/input";
 
 interface FoodItem {
   id: string;
@@ -21,12 +22,19 @@ interface FoodItem {
   discount?: string;
 }
 
+interface Comment {
+  id: string;
+  author: string;
+  text: string;
+  timestamp: string;
+}
+
 interface FoodCardProps {
   food: FoodItem;
   viewType: 'donor' | 'receiver';
   onClaim?: (id: string) => void;
   onEdit?: (id: string) => void;
-  onDelete?: (string) => void;
+  onDelete?: (id: string) => void;
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({ 
@@ -36,8 +44,24 @@ const FoodCard: React.FC<FoodCardProps> = ({
   onEdit, 
   onDelete 
 }) => {
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState<Comment[]>([]);
   const isAvailable = food.status === 'available' || !food.status;
   
+  const handleAddComment = () => {
+    if (newComment.trim()) {
+      const comment: Comment = {
+        id: Date.now().toString(),
+        author: 'User', // In a real app, this would come from auth
+        text: newComment.trim(),
+        timestamp: new Date().toLocaleString()
+      };
+      setComments([...comments, comment]);
+      setNewComment('');
+    }
+  };
+
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow card-gradient bg-opacity-50">
       <div className="relative h-48 bg-muted">
@@ -105,27 +129,63 @@ const FoodCard: React.FC<FoodCardProps> = ({
               Posted by: {food.donor}
             </div>
           )}
+          {showComments && (
+            <div className="mt-4 space-y-2">
+              {comments.map((comment) => (
+                <div key={comment.id} className="bg-background/50 p-2 rounded-md">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium">{comment.author}</span>
+                    <span className="text-muted-foreground">{comment.timestamp}</span>
+                  </div>
+                  <p className="text-sm mt-1">{comment.text}</p>
+                </div>
+              ))}
+              <div className="flex gap-2 mt-2">
+                <Input
+                  placeholder="Add a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  className="flex-1"
+                />
+                <Button onClick={handleAddComment} variant="secondary" size="sm">
+                  Post
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="pt-2 bg-white/50 backdrop-blur-sm">
-        {viewType === 'donor' ? (
-          <div className="flex justify-between w-full gap-2">
-            <Button variant="secondary" size="sm" onClick={() => onEdit?.(food.id)} className="flex-1">
-              Edit
-            </Button>
-            <Button variant="destructive" size="sm" onClick={() => onDelete?.(food.id)} className="flex-1">
-              Delete
-            </Button>
-          </div>
-        ) : (
-          <Button 
-            className="w-full" 
-            disabled={!isAvailable}
-            onClick={() => onClaim?.(food.id)}
-          >
-            {isAvailable ? 'Claim' : 'Claimed'}
-          </Button>
-        )}
+        <div className="flex w-full gap-2">
+          {viewType === 'donor' ? (
+            <>
+              <Button variant="secondary" size="sm" onClick={() => onEdit?.(food.id)} className="flex-1">
+                Edit
+              </Button>
+              <Button variant="destructive" size="sm" onClick={() => onDelete?.(food.id)} className="flex-1">
+                Delete
+              </Button>
+            </>
+          ) : (
+            <div className="flex w-full gap-2">
+              <Button 
+                className="flex-1" 
+                disabled={!isAvailable}
+                onClick={() => onClaim?.(food.id)}
+              >
+                {isAvailable ? 'Claim' : 'Claimed'}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowComments(!showComments)}
+                className="w-10"
+              >
+                <MessageSquare className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
