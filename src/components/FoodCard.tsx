@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,7 @@ const FoodCard: React.FC<FoodCardProps> = ({
   const isAvailable = food.status === 'available' || !food.status;
   
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow card-gradient bg-opacity-50">
       <div className="relative h-48 bg-muted">
         <img 
           src={food.image || '/placeholder.svg'} 
@@ -93,13 +92,13 @@ const FoodCard: React.FC<FoodCardProps> = ({
           )}
         </div>
       </CardContent>
-      <CardFooter className="pt-2">
+      <CardFooter className="pt-2 bg-white/50 backdrop-blur-sm">
         {viewType === 'donor' ? (
-          <div className="flex justify-between w-full">
-            <Button variant="outline" size="sm" onClick={() => onEdit?.(food.id)}>
+          <div className="flex justify-between w-full gap-2">
+            <Button variant="secondary" size="sm" onClick={() => onEdit?.(food.id)} className="flex-1">
               Edit
             </Button>
-            <Button variant="destructive" size="sm" onClick={() => onDelete?.(food.id)}>
+            <Button variant="destructive" size="sm" onClick={() => onDelete?.(food.id)} className="flex-1">
               Delete
             </Button>
           </div>

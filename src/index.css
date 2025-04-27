@@ -1,39 +1,38 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 34 38% 96%; /* Warm beige background */
+    --foreground: 30 10% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 34 30% 98%;
+    --card-foreground: 30 10% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 34 30% 98%;
+    --popover-foreground: 30 10% 15%;
 
-    --primary: 122 39% 49%; /* Green #4CAF50 */
+    --primary: 122 39% 49%; /* Keeping green but slightly muted */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 36 100% 50%; /* Orange #FF9800 */
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 32 50% 85%; /* Warm beige secondary */
+    --secondary-foreground: 30 10% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 34 20% 92%;
+    --muted-foreground: 30 10% 45%;
 
-    --accent: 36 100% 50%; /* Orange #FF9800 */
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 36 100% 50%;
+    --accent-foreground: 30 10% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 34 20% 85%;
+    --input: 34 20% 85%;
     --ring: 122 39% 49%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 
   .dark {
@@ -92,4 +91,16 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+}
+
+.warm-gradient {
+  background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+}
+
+.card-gradient {
+  background: linear-gradient(to top, #e6b980 0%, #eacda3 100%);
+}
+
+.bread-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e2d1c3' fill-opacity='0.15'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
