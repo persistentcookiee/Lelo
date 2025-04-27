@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Home, User } from "lucide-react";
 
 interface HeaderProps {
   title?: string;
@@ -15,9 +16,16 @@ const Header: React.FC<HeaderProps> = ({
   showProfileButton = false
 }) => {
   const navigate = useNavigate();
+  const currentRole = localStorage.getItem("userRole")?.toLowerCase() || "donor";
+
+  const toggleRole = () => {
+    const newRole = currentRole === "donor" ? "receiver" : "donor";
+    localStorage.setItem("userRole", newRole);
+    navigate(`/${newRole}`);
+  };
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+    <header className="sticky top-0 z-10 bg-[#f5e6d3] border-b border-[#e2d1bc] shadow-sm">
       <div className="flex items-center justify-between px-4 py-3">
         {showBackButton ? (
           <Button 
@@ -33,13 +41,28 @@ const Header: React.FC<HeaderProps> = ({
             <span className="sr-only">Go back</span>
           </Button>
         ) : (
-          <div className="w-9"></div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate('/')} 
+            className="mr-2"
+          >
+            <Home className="h-5 w-5" />
+            <span className="sr-only">Go to home</span>
+          </Button>
         )}
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           <h1 className="text-lg font-semibold text-center">
             {title}
           </h1>
+          <Button 
+            variant="outline" 
+            onClick={toggleRole}
+            className="text-sm bg-[#f5e6d3] border-[#e2d1bc] hover:bg-[#e2d1bc]"
+          >
+            Switch to {currentRole === "donor" ? "Receiver" : "Donor"}
+          </Button>
         </div>
 
         {showProfileButton ? (
@@ -49,10 +72,7 @@ const Header: React.FC<HeaderProps> = ({
             onClick={() => navigate('/profile')} 
             className="ml-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+            <User className="h-5 w-5" />
             <span className="sr-only">Profile</span>
           </Button>
         ) : (
