@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Star, MapPin } from 'lucide-react';
 
 interface FoodItem {
   id: string;
@@ -15,6 +16,9 @@ interface FoodItem {
   isUrgent?: boolean;
   donor?: string;
   status?: 'available' | 'reserved' | 'completed';
+  rating?: number;
+  reviews?: number;
+  discount?: string;
 }
 
 interface FoodCardProps {
@@ -22,7 +26,7 @@ interface FoodCardProps {
   viewType: 'donor' | 'receiver';
   onClaim?: (id: string) => void;
   onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (string) => void;
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({ 
@@ -47,22 +51,33 @@ const FoodCard: React.FC<FoodCardProps> = ({
             Urgent
           </Badge>
         )}
+        {food.discount && (
+          <Badge variant="secondary" className="absolute top-2 left-2">
+            {food.discount}
+          </Badge>
+        )}
       </div>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <div>
             <CardTitle className="line-clamp-1">{food.title}</CardTitle>
-            <CardDescription className="flex items-center text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                <path d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 5.523 4.477 10 10 10 1.555 0 3.023-.358 4.35-.992"/>
-                <path d="m18 9-4 4-2-2"/>
-              </svg>
+            <CardDescription className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
               {food.location}
               {viewType === 'receiver' && food.distance && (
-                <span className="ml-2">{food.distance}</span>
+                <span>{food.distance}</span>
               )}
             </CardDescription>
           </div>
+          {food.rating && (
+            <div className="flex items-center gap-1">
+              <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+              <span className="text-sm font-medium">{food.rating}</span>
+              {food.reviews && (
+                <span className="text-sm text-muted-foreground">({food.reviews})</span>
+              )}
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent>

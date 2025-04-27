@@ -13,8 +13,8 @@
     --popover: 34 30% 98%;
     --popover-foreground: 30 10% 15%;
 
-    --primary: 122 39% 49%; /* Keeping green but slightly muted */
-    --primary-foreground: 210 40% 98%;
+    --primary: 32 50% 85%; /* Warm beige primary */
+    --primary-foreground: 30 10% 15%;
 
     --secondary: 32 50% 85%; /* Warm beige secondary */
     --secondary-foreground: 30 10% 15%;
@@ -30,7 +30,7 @@
 
     --border: 34 20% 85%;
     --input: 34 20% 85%;
-    --ring: 122 39% 49%;
+    --ring: 32 50% 85%;
 
     --radius: 1rem;
   }
